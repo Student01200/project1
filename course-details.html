@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المساق - مساعد</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>مساعد</h1>
+                <p>منصة طلاب الخضوري</p>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="courses.html" class="active">المواد</a></li>
+                <li><a href="tools.html">الأدوات</a></li>
+                <li><a href="activity.html">النشاط</a></li>
+                <li><button class="theme-toggle" onclick="toggleTheme()">🌙</button></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn-login">تسجيل الدخول</a>
+                <a href="register.html" class="btn-register">إنشاء حساب</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Course Header -->
+    <section class="course-header">
+        <div class="header-container">
+            <div class="header-back">
+                <a href="courses.html" class="back-btn">← رجوع إلى المواد</a>
+            </div>
+            <div class="course-title-section">
+                <h1 id="course-name">اسم المساق</h1>
+                <p id="course-code" class="course-code-info">رقم المساق</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Content -->
+    <section class="course-content-section">
+        <div class="course-container">
+            <!-- Course Main Info -->
+            <div class="course-main-info">
+                <div class="course-info-grid">
+                    <div class="info-card">
+                        <div class="info-label">عدد الساعات المعتمدة</div>
+                        <div class="info-value" id="course-hours">0</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">القسم</div>
+                        <div class="info-value" id="course-category">متطلب جامعة اجباري</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Details Tabs -->
+            <div class="course-tabs">
+                <div class="tabs-header">
+                    <button class="tab-button active" onclick="switchTab(event, 'resources')">الموارد</button>
+                    <button class="tab-button" onclick="switchTab(event, 'discussion')">النقاش</button>
+                </div>
+
+                <!-- Resources Tab -->
+                <div id="resources" class="tab-content active">
+                    <!-- Basic Resources -->
+                    <div class="resources-category">
+                        <h4 class="category-title">📚 الموارد الأساسية</h4>
+                        <div class="resource-list-items">
+                            <div class="resource-file-item">
+                                <div class="file-icon">📖</div>
+                                <div class="file-info">
+                                    <p class="file-name">الكتاب المرجعي</p>
+                                    <p class="file-desc">الكتاب الرسمي للمساق</p>
+                                </div>
+                                <button class="file-btn" onclick="downloadFile('book', event)">تحميل</button>
+                            </div>
+                            <div class="resource-file-item">
+                                <div class="file-icon">🎯</div>
+                                <div class="file-info">
+                                    <p class="file-name">أمثلة وتمارين</p>
+                                    <p class="file-desc">تمارين وأمثلة عملية</p>
+                                </div>
+                                <button class="file-btn" onclick="downloadFile('examples', event)">عرض</button>
+                            </div>
+                            <!-- Summaries Expandable -->
+                            <div class="resource-file-item expandable-item">
+                                <div class="file-icon">📄</div>
+                                <div class="file-info">
+                                    <p class="file-name">الملخصات</p>
+                                    <p class="file-desc">ملخصات نصفي ونهائي</p>
+                                </div>
+                                <button class="file-btn" onclick="toggleResourceExpand(event)">عرض</button>
+                            </div>
+                            <div class="expandable-dropdown" style="display: none;">
+                                <div class="expand-section">
+                                    <div class="expand-header">📋 ملخصات النصفي</div>
+                                    <div class="expand-items" id="summaries-midterm">
+                                        <!-- Dynamically loaded -->
+                                    </div>
+                                    <div class="empty-expand" id="empty-summaries-midterm" style="display: none;">
+                                        <p>لا توجد ملخصات نصفي حالياً</p>
+                                    </div>
+                                </div>
+                                <div class="expand-section">
+                                    <div class="expand-header">📋 ملخصات النهائي</div>
+                                    <div class="expand-items" id="summaries-final">
+                                        <!-- Dynamically loaded -->
+                                    </div>
+                                    <div class="empty-expand" id="empty-summaries-final" style="display: none;">
+                                        <p>لا توجد ملخصات نهائي حالياً</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Exams Expandable -->
+                            <div class="resource-file-item expandable-item">
+                                <div class="file-icon">❓</div>
+                                <div class="file-info">
+                                    <p class="file-name">أسئلة السنوات</p>
+                                    <p class="file-desc">أسئلة نصفي ونهائي سابقة</p>
+                                </div>
+                                <button class="file-btn" onclick="toggleResourceExpand(event)">عرض</button>
+                            </div>
+                            <div class="expandable-dropdown" style="display: none;">
+                                <div class="expand-section">
+                                    <div class="expand-header">📝 أسئلة النصفي</div>
+                                    <div class="expand-items" id="exams-midterm">
+                                        <!-- Dynamically loaded -->
+                                    </div>
+                                    <div class="empty-expand" id="empty-exams-midterm" style="display: none;">
+                                        <p>لا توجد امتحانات نصفي حالياً</p>
+                                    </div>
+                                </div>
+                                <div class="expand-section">
+                                    <div class="expand-header">📝 أسئلة النهائي</div>
+                                    <div class="expand-items" id="exams-final">
+                                        <!-- Dynamically loaded -->
+                                    </div>
+                                    <div class="empty-expand" id="empty-exams-final" style="display: none;">
+                                        <p>لا توجد امتحانات نهائي حالياً</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discussion Tab -->
+                <div id="discussion" class="tab-content">
+                    <div class="tab-section">
+                        <h3>💬 نقاش المساق</h3>
+                        <p class="discussion-subtitle">شارك أفكارك، اطرح أسئلتك، وتفاعل مع زملائك</p>
+                        
+                        <div class="discussion-form">
+                            <div class="form-header">
+                                <label for="comment-name" class="form-label">الاسم (اختياري)</label>
+                                <input type="text" id="comment-name" class="comment-name-input" placeholder="اسمك أو اسم مستعار">
+                            </div>
+                            <textarea id="comment-text" placeholder="اكتب تعليقك أو سؤالك هنا..." class="discussion-input"></textarea>
+                            <div class="form-actions">
+                                <button class="post-btn" onclick="postDiscussion()">
+                                    <span>📝</span> نشر التعليق
+                                </button>
+                                <span class="char-count" id="char-count">0 / 500</span>
+                            </div>
+                        </div>
+
+                        <div class="discussion-stats" id="discussion-stats">
+                            <span id="comments-count">0</span> تعليق
+                        </div>
+
+                        <div class="discussion-list" id="discussion-list">
+                            <p class="empty-list">لا توجد تعليقات حالياً. كن أول من يعلق!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Courses -->
+            <div class="related-courses-section">
+                <h3>مساقات ذات صلة</h3>
+                <div class="related-courses-grid" id="related-courses">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>مساعد</h3>
+                <p>منصة مجتمع طلابية</p>
+            </div>
+            <div class="footer-section">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="courses.html">المواد</a></li>
+                    <li><a href="tools.html">الأدوات</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>تابعنا</h4>
+                <ul>
+                    <li><a href="#" target="_blank">فيسبوك</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 مساعد. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script src="courses-data.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Use the courses database from courses-data.js
+        const coursesDatabase = COURSES_DATABASE || {};
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const courseId = params.get('id');
+
+            // Load comments for this course
+            const courseIdForComments = courseId || 'default';
+            comments = JSON.parse(localStorage.getItem('course-comments-' + courseIdForComments) || '[]');
+            loadComments();
+
+            if (courseId && coursesDatabase[courseId]) {
+                const course = coursesDatabase[courseId];
+                displayCourseDetails(courseId, course);
+                loadRelatedCourses(courseId);
+                loadResources();
+            } else {
+                const header = document.querySelector('.course-header .header-container');
+                if (header) {
+                    header.innerHTML = `
+                        <div class="header-back">
+                            <a href="courses.html" class="back-btn">← رجوع إلى المواد</a>
+                        </div>
+                        <div class="course-title-section">
+                            <h1 style="color: white;">المساق غير موجود</h1>
+                            <p style="color: rgba(255,255,255,0.9);">الرجاء التحقق من الرابط</p>
+                        </div>
+                    `;
+                }
+            }
+
+            // Setup comment form
+            const commentText = document.getElementById('comment-text');
+            if (commentText) {
+                commentText.addEventListener('input', updateCharCount);
+                commentText.addEventListener('keydown', function(e) {
+                    if (e.ctrlKey && e.key === 'Enter') {
+                        postDiscussion();
+                    }
+                });
+            }
+        });
+
+        function loadResources() {
+            loadResourceCategory('summaries-midterm', 'empty-summaries-midterm');
+            loadResourceCategory('summaries-final', 'empty-summaries-final');
+            loadResourceCategory('exams-midterm', 'empty-exams-midterm');
+            loadResourceCategory('exams-final', 'empty-exams-final');
+        }
+
+        // Resources database (empty for now, can be populated later)
+        const resourcesDatabase = {
+            'summaries-midterm': [],
+            'summaries-final': [],
+            'exams-midterm': [],
+            'exams-final': []
+        };
+
+        function loadResourceCategory(categoryId, emptyId) {
+            const container = document.getElementById(categoryId);
+            const emptyMsg = document.getElementById(emptyId);
+            const resources = resourcesDatabase[categoryId] || [];
+
+            if (!container) return;
+
+            if (resources.length === 0) {
+                container.innerHTML = '';
+                container.style.display = 'none';
+                if (emptyMsg) emptyMsg.style.display = 'block';
+            } else {
+                container.style.display = 'flex';
+                if (emptyMsg) emptyMsg.style.display = 'none';
+                container.innerHTML = resources.map(resource => `
+                    <div class="expand-item">
+                        <div class="expand-item-content">
+                            <span class="expand-item-name">${resource.name}</span>
+                            <span class="expand-item-desc">${resource.desc}</span>
+                        </div>
+                        <button class="expand-item-btn">تحميل</button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function toggleResourceExpand(event) {
+            event.preventDefault();
+            const btn = event.currentTarget;
+            const item = btn.closest('.expandable-item');
+            if (!item) return;
+            const dropdown = item.nextElementSibling;
+
+            if (dropdown && dropdown.classList.contains('expandable-dropdown')) {
+                const isVisible = dropdown.style.display !== 'block';
+                dropdown.style.display = isVisible ? 'block' : 'none';
+                btn.textContent = isVisible ? 'إخفاء' : 'عرض';
+            }
+        }
+
+        function displayCourseDetails(courseId, course) {
+            const nameEl = document.getElementById('course-name');
+            if (nameEl) nameEl.textContent = course.name;
+
+            const codeEl = document.getElementById('course-code');
+            if (codeEl) codeEl.textContent = `رقم المساق: ${courseId}`;
+
+            const hoursEl = document.getElementById('course-hours');
+            if (hoursEl) hoursEl.textContent = `${course.hours} ساعات`;
+
+            const catEl = document.getElementById('course-category');
+            if (catEl) catEl.textContent = course.category;
+
+            const descEl = document.getElementById('course-description');
+            if (descEl) descEl.innerHTML = `<p>${course.description}</p>`;
+
+            document.title = `${course.name} - مساعد`;
+
+            const prereqElement = document.getElementById('course-prerequisites');
+            if (prereqElement) {
+                if (course.prerequisites && course.prerequisites !== 'لا توجد متطلبات سابقة' && course.prerequisitesId) {
+                    const prereqCode = course.prerequisitesId;
+                    const prereqName = coursesDatabase[prereqCode]?.name || course.prerequisites;
+                    prereqElement.innerHTML = `<a href="course-details.html?id=${prereqCode}" class="prerequisite-link">${prereqName} (${prereqCode})</a>`;
+                } else {
+                    prereqElement.innerHTML = '<p class="no-prerequisites">لا توجد متطلبات سابقة</p>';
+                }
+            }
+        }
+
+        function loadRelatedCourses(currentCourseId) {
+            const relatedCoursesContainer = document.getElementById('related-courses');
+            if (!relatedCoursesContainer) return;
+            const currentCategory = coursesDatabase[currentCourseId].category;
+            let relatedHtml = '';
+            let count = 0;
+
+            for (const [id, course] of Object.entries(coursesDatabase)) {
+                if (id !== currentCourseId && course.category === currentCategory && count < 3) {
+                    relatedHtml += `
+                        <a href="course-details.html?id=${id}" class="related-course-card">
+                            <h4>${course.name}</h4>
+                            <p class="course-code">${id}</p>
+                            <p class="course-hours">${course.hours} ساعات</p>
+                        </a>
+                    `;
+                    count++;
+                }
+            }
+
+            relatedCoursesContainer.innerHTML = relatedHtml || '<p style="grid-column: 1/-1;">لا توجد مساقات ذات صلة</p>';
+        }
+
+        function switchTab(event, tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            const target = document.getElementById(tabName);
+            if (target) target.classList.add('active');
+            if (event && event.target) event.target.classList.add('active');
+        }
+
+        // Discussion/Comments Management
+        let comments = [];
+
+        function loadComments() {
+            const discussionList = document.getElementById('discussion-list');
+            const statsCount = document.getElementById('comments-count');
+            
+            if (!discussionList) return;
+
+            if (comments.length === 0) {
+                discussionList.innerHTML = '<p class="empty-list">لا توجد تعليقات حالياً. كن أول من يعلق!</p>';
+                if (statsCount) statsCount.textContent = '0';
+                return;
+            }
+
+            // Sort comments by date (newest first)
+            const sortedComments = [...comments].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (statsCount) statsCount.textContent = comments.length;
+            
+            discussionList.innerHTML = sortedComments.map((comment, index) => `
+                <div class="comment-item" data-id="${comment.id}">
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            <span class="author-avatar">${comment.name ? comment.name.charAt(0).toUpperCase() : '👤'}</span>
+                            <div class="author-info">
+                                <span class="author-name">${comment.name || 'مجهول'}</span>
+                                <span class="comment-date">${formatDate(comment.date)}</span>
+                            </div>
+                        </div>
+                        <button class="delete-comment-btn" onclick="deleteComment('${comment.id}')" title="حذف التعليق">🗑️</button>
+                    </div>
+                    <div class="comment-body">
+                        <p>${escapeHtml(comment.text)}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function postDiscussion() {
+            const commentText = document.getElementById('comment-text');
+            const commentName = document.getElementById('comment-name');
+            
+            if (!commentText || !commentText.value.trim()) {
+                alert('الرجاء إدخال تعليق قبل النشر');
+                return;
+            }
+
+            if (commentText.value.length > 500) {
+                alert('التعليق طويل جداً. الحد الأقصى 500 حرف');
+                return;
+            }
+
+            // Check if user is banned
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            const username = commentName?.value.trim() || (currentUser ? currentUser.username : '');
+            const bannedUsers = JSON.parse(localStorage.getItem('banned-users') || '[]');
+            
+            if (username && bannedUsers.includes(username)) {
+                alert('عذراً، تم حظرك من التعليق. يرجى التواصل مع المشرف.');
+                return;
+            }
+
+            const newComment = {
+                id: Date.now().toString(),
+                name: username || '',
+                text: commentText.value.trim(),
+                date: new Date().toISOString()
+            };
+
+            comments.push(newComment);
+            saveComments();
+            loadComments();
+            
+            // Clear form
+            if (commentText) commentText.value = '';
+            if (commentName) commentName.value = '';
+            updateCharCount();
+            
+            // Show success message
+            const successMsg = document.createElement('div');
+            successMsg.className = 'success-message';
+            successMsg.textContent = '✓ تم نشر التعليق بنجاح!';
+            document.querySelector('.discussion-form').appendChild(successMsg);
+            setTimeout(() => successMsg.remove(), 3000);
+        }
+
+        function deleteComment(commentId) {
+            if (!confirm('هل أنت متأكد من حذف هذا التعليق؟')) return;
+            
+            comments = comments.filter(c => c.id !== commentId);
+            saveComments();
+            loadComments();
+        }
+
+        function saveComments() {
+            const params = new URLSearchParams(window.location.search);
+            const courseId = params.get('id') || 'default';
+            localStorage.setItem('course-comments-' + courseId, JSON.stringify(comments));
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = now - date;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+
+            if (minutes < 1) return 'الآن';
+            if (minutes < 60) return `منذ ${minutes} دقيقة`;
+            if (hours < 24) return `منذ ${hours} ساعة`;
+            if (days < 7) return `منذ ${days} يوم`;
+            
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return date.toLocaleDateString('ar-SA', options);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function updateCharCount() {
+            const commentText = document.getElementById('comment-text');
+            const charCount = document.getElementById('char-count');
+            if (commentText && charCount) {
+                const length = commentText.value.length;
+                charCount.textContent = `${length} / 500`;
+                charCount.className = 'char-count' + (length > 500 ? ' error' : length > 400 ? ' warning' : '');
+            }
+        }
+
+
+        // Small utility functions
+        function shareOnFacebook() { const url = window.location.href; window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank'); }
+        function shareOnWhatsApp() { const url = window.location.href; const text = `شارك معي هذا المساق: ${document.getElementById('course-name')?.textContent || ''}`; window.open('https://wa.me/?text=' + encodeURIComponent(text + ' ' + url), '_blank'); }
+        function copyLink() { const url = window.location.href; navigator.clipboard.writeText(url).then(() => alert('تم نسخ الرابط بنجاح')); }
+
+        function downloadFile(fileType, event) {
+            event.preventDefault();
+            
+            // Check if user has subscription
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            if (!currentUser) {
+                if (confirm('يجب تسجيل الدخول أولاً للوصول للملفات. هل تريد الانتقال لصفحة تسجيل الدخول؟')) {
+                    window.location.href = 'login.html';
+                }
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.username === currentUser.username);
+            
+            if (!user || !user.subscription) {
+                alert('⚠️ يجب أن يكون لديك اشتراك نشط لتحميل الملفات.\n\nيمكنك:\n- رفع 10 ملفات للحصول على اشتراك مجاني\n- أو الاشتراك مقابل 3 شيكل');
+                window.location.href = 'profile.html';
+                return;
+            }
+
+            // User has subscription, allow download
+            alert('✓ جاري تحميل الملف...\n\n(في التطبيق الحقيقي، سيتم تحميل الملف)');
+        }
+    </script>
+</body>
+
+</html>

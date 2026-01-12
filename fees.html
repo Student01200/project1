@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة الرسوم الجامعية - مساعد</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .fee-calculator {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 40px;
+            background: var(--light-bg);
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .calculator-title h1 {
+            color: var(--primary-color);
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .calculator-title p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .calculator-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .input-field,
+        .select-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color, #e0e0e0);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--input-bg, #fff);
+            color: var(--text-dark);
+            transition: border-color 0.3s;
+        }
+
+        [data-theme="dark"] .input-field,
+        [data-theme="dark"] .select-field {
+            background: #3a3a3a;
+            border-color: #555;
+            color: #fff;
+        }
+
+        .input-field:focus,
+        .select-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .checkbox-label {
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .calculator-button {
+            grid-column: 1 / -1;
+            padding: 15px 30px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .calculator-button:hover {
+            background: linear-gradient(135deg, var(--primary-color), #7a7a64);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(107, 107, 84, 0.3);
+        }
+
+        .result-box {
+            grid-column: 1 / -1;
+            margin-top: 20px;
+            padding: 25px;
+            background: linear-gradient(135deg, var(--primary-color), #7a7a64);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-row {
+            margin: 12px 0;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .result-details {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .fee-breakdown {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+
+        .breakdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .breakdown-label {
+            opacity: 0.9;
+            margin-bottom: 3px;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-content {
+                grid-template-columns: 1fr;
+            }
+
+            .fee-calculator {
+                padding: 25px;
+                margin: 20px 10px;
+            }
+
+            .result-value {
+                font-size: 24px;
+            }
+
+            .fee-breakdown {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>مساعد</h1>
+                <p>منصة طلاب الخضوري</p>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="courses.html">المواد</a></li>
+                <li><a href="tools.html">الأدوات</a></li>
+                <li><a href="activity.html">النشاط</a></li>
+                <li><button class="theme-toggle" onclick="toggleTheme()">🌙</button></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn-login">تسجيل الدخول</a>
+                <a href="register.html" class="btn-register">إنشاء حساب</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="header-content">
+            <h1>حاسبة الرسوم الجامعية</h1>
+            <p>احسب رسومك الجامعية والتقسيط بسهولة</p>
+        </div>
+    </section>
+
+    <!-- Fee Calculator Section -->
+    <section class="fee-calculator">
+        <div class="calculator-title">
+            <h1>💰 حاسبة الرسوم والتقسيط</h1>
+            <p>جامعة الخضوري - فروع الضفة الغربية</p>
+        </div>
+
+        <div class="calculator-content">
+            <!-- Credit Hours Input -->
+            <div class="input-group">
+                <label class="input-label">عدد الساعات المعتمدة</label>
+                <input type="number" id="credit-hours" class="input-field" placeholder="أدخل عدد الساعات" min="0" value="">
+            </div>
+
+            <!-- Number of Subjects Input -->
+            <div class="input-group">
+                <label class="input-label">عدد المواد</label>
+                <input type="number" id="num-subjects" class="input-field" placeholder="أدخل عدد المواد" min="0" value="">
+            </div>
+            <!-- Scholarship -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="has-scholarship" class="checkbox-input">
+                <label for="has-scholarship" class="checkbox-label">لدي منحة جزئية</label>
+            </div>
+
+            <!-- Scholarship Amount -->
+            <div class="input-group" id="scholarship-group" style="display: none;">
+                <label class="input-label">مبلغ المنحة (%)</label>
+                <input type="number" id="scholarship-amount" class="input-field" placeholder="أدخل نسبة المنحة" min="0" max="100" value="">
+            </div>
+
+            <!-- Calculate Button -->
+            <button class="calculator-button" onclick="calculateFee()">احسب الرسوم</button>
+
+            <!-- Result Box -->
+            <div class="result-box" id="fee-result">
+                <div class="result-row">
+                    <div class="result-label">إجمالي الرسوم الجامعية</div>
+                    <div class="result-value" id="total-fee">0</div>
+                </div>
+
+                <div class="fee-breakdown" id="fee-breakdown">
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">الرسوم الأساسية</div>
+                        <div class="breakdown-value" id="base-fee">0 د.أ</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">الرسوم الإضافية</div>
+                        <div class="breakdown-value" id="additional-fee-display">0 د.أ</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">بعد الخصم (المنحة)</div>
+                        <div class="breakdown-value" id="discount-amount">0 د.أ</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">قيمة الدفعة الواحدة</div>
+                        <div class="breakdown-value" id="installment-amount">0 د.أ</div>
+                    </div>
+                </div>
+
+                <div class="result-details" id="installment-details"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>مساعد</h3>
+                <p>منصة مجتمع طلابية</p>
+            </div>
+            <div class="footer-section">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="courses.html">المواد</a></li>
+                    <li><a href="tools.html">الأدوات</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>تابعنا</h4>
+                <ul>
+                    <li><a href="#" target="_blank">فيسبوك</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 مساعد. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Show/hide scholarship input
+        document.getElementById('has-scholarship').addEventListener('change', function() {
+            document.getElementById('scholarship-group').style.display = this.checked ? 'block' : 'none';
+        });
+
+        // Fee calculation function
+        function calculateFee() {
+            const creditHours = parseFloat(document.getElementById('credit-hours').value) || 0;
+            const numSubjects = parseFloat(document.getElementById('num-subjects').value) || 0;
+            const studyType = document.getElementById('study-type').value;
+            const studentType = document.getElementById('student-type').value;
+            const additionalFees = parseFloat(document.getElementById('additional-fees').value) || 0;
+            const installmentPlan = parseInt(document.getElementById('installment-plan').value);
+            const hasScholarship = document.getElementById('has-scholarship').checked;
+            const scholarshipAmount = hasScholarship ? parseFloat(document.getElementById('scholarship-amount').value) || 0 : 0;
+
+            // Base fee per credit hour (in JOD)
+            let feePerHour = 50; // Local student
+
+            if (studentType === 'international') {
+                feePerHour = 100; // International student
+            } else if (studentType === 'refugee') {
+                feePerHour = 25; // Refugee student discount
+            }
+
+            // Adjust for study type
+            if (studyType === 'distance') {
+                feePerHour *= 0.8; // 20% discount for distance learning
+            } else if (studyType === 'mixed') {
+                feePerHour *= 0.9; // 10% discount for mixed
+            }
+
+            // Calculate base fee
+            let baseFee = creditHours * feePerHour;
+
+            // Add additional fees
+            let totalFee = baseFee + additionalFees;
+
+            // Apply scholarship
+            let discountAmount = 0;
+            if (hasScholarship && scholarshipAmount > 0) {
+                discountAmount = (totalFee * scholarshipAmount) / 100;
+                totalFee -= discountAmount;
+            }
+
+            // Ensure minimum 0
+            totalFee = Math.max(0, totalFee);
+
+            // Calculate installment
+            const installmentAmount = installmentPlan === 'full' ? totalFee : totalFee / parseInt(installmentPlan);
+
+            // Update display
+            document.getElementById('total-fee').textContent = totalFee.toFixed(2) + ' د.أ';
+            document.getElementById('base-fee').textContent = baseFee.toFixed(2) + ' د.أ';
+            document.getElementById('additional-fee-display').textContent = additionalFees.toFixed(2) + ' د.أ';
+            document.getElementById('discount-amount').textContent = discountAmount.toFixed(2) + ' د.أ';
+            document.getElementById('installment-amount').textContent = installmentAmount.toFixed(2) + ' د.أ';
+
+            // Show installment details
+            const installmentDetailsEl = document.getElementById('installment-details');
+            if (installmentPlan !== 'full') {
+                const numPayments = parseInt(installmentPlan);
+                installmentDetailsEl.innerHTML = `
+                    <strong>تقسيط على ${numPayments} دفعات:</strong><br>
+                    عدد الدفعات: ${numPayments}<br>
+                    قيمة الدفعة: ${installmentAmount.toFixed(2)} د.أ
+                `;
+            } else {
+                installmentDetailsEl.innerHTML = '<strong>دفع كامل المبلغ</strong>';
+            }
+
+            // Show result
+            document.getElementById('fee-result').classList.add('show');
+        }
+
+        // Allow Enter key to calculate
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input[type="number"], select');
+            inputs.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        calculateFee();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

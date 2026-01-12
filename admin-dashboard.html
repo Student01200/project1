@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم المشرف - مساعد</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-dashboard-page {
+            min-height: 100vh;
+            padding: 40px 20px;
+            background: var(--dark-bg);
+        }
+
+        .admin-dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .admin-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .admin-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .admin-btn {
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .admin-btn:hover {
+            background: white;
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .account-info-card-admin {
+            background: var(--light-bg);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid var(--border-color);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .admin-profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            flex-shrink: 0;
+            color: white;
+        }
+
+        .admin-account-details {
+            flex: 1;
+        }
+
+        .admin-account-details h2 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        .admin-account-details p {
+            color: var(--text-color);
+            margin: 5px 0;
+        }
+
+        .account-status-badge-admin {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #44ff44;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card-admin {
+            background: var(--light-bg);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .stat-card-admin:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.15);
+        }
+
+        .stat-value-admin {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .stat-label-admin {
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .admin-tab-btn {
+            padding: 12px 25px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-light);
+            transition: all 0.3s;
+        }
+
+        .admin-tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .admin-tab-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .admin-tab-content {
+            display: none;
+        }
+
+        .admin-tab-content.active {
+            display: block;
+        }
+
+        .admin-card {
+            background: var(--light-bg);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .admin-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .comment-item-admin,
+        .file-item-admin,
+        .user-item-admin {
+            background: var(--dark-bg);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .comment-item-admin:hover,
+        .file-item-admin:hover,
+        .user-item-admin:hover {
+            border-color: var(--primary-color);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .item-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .item-meta {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .item-content {
+            color: var(--text-color);
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .action-btn.approve {
+            background: #44ff44;
+            color: white;
+        }
+
+        .action-btn.approve:hover {
+            background: #00cc00;
+        }
+
+        .action-btn.reject {
+            background: #ff4444;
+            color: white;
+        }
+
+        .action-btn.reject:hover {
+            background: #cc0000;
+        }
+
+        .action-btn.delete {
+            background: #ff4444;
+            color: white;
+        }
+
+        .action-btn.delete:hover {
+            background: #cc0000;
+        }
+
+        .action-btn.warn {
+            background: #ffaa00;
+            color: white;
+        }
+
+        .action-btn.warn:hover {
+            background: #cc8800;
+        }
+
+        .action-btn.ban {
+            background: #ff4444;
+            color: white;
+        }
+
+        .action-btn.ban:hover {
+            background: #cc0000;
+        }
+
+        .action-btn.unban {
+            background: #44ff44;
+            color: white;
+        }
+
+        .action-btn.unban:hover {
+            background: #00cc00;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                padding: 30px 20px;
+            }
+
+            .admin-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .account-info-card-admin {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-dashboard-page">
+        <div class="admin-dashboard-container">
+            <!-- رأس الصفحة -->
+            <div class="admin-header">
+                <div>
+                    <h1>🔧 لوحة تحكم المشرف</h1>
+                    <p>إدارة المنصة والمراقبة</p>
+                </div>
+                <div class="admin-actions">
+                    <a href="index.html" class="admin-btn">🏠 الصفحة الرئيسية</a>
+                    <a href="courses.html" class="admin-btn">📚 المساقات</a>
+                    <a href="upload.html" class="admin-btn">📤 رفع ملف</a>
+                    <button class="admin-btn" onclick="refreshData()">🔄 تحديث</button>
+                    <button class="admin-btn" onclick="logoutAdmin()">🚪 تسجيل الخروج</button>
+                </div>
+            </div>
+
+            <!-- معلومات الحساب -->
+            <div class="account-info-card-admin">
+                <div class="admin-profile-image">🔧</div>
+                <div class="admin-account-details">
+                    <h2 id="admin-name">المشرف</h2>
+                    <p><strong>اسم المستخدم:</strong> <span id="admin-username">admin</span></p>
+                    <p><strong>الدور:</strong> مشرف النظام</p>
+                    <div class="account-status-badge-admin">✅ حساب مفتوح حالياً</div>
+                </div>
+            </div>
+
+            <!-- إحصائيات -->
+            <div class="stats-grid">
+                <div class="stat-card-admin">
+                    <div class="stat-value-admin" id="total-comments">0</div>
+                    <div class="stat-label-admin">إجمالي التعليقات</div>
+                </div>
+                <div class="stat-card-admin">
+                    <div class="stat-value-admin" id="pending-files">0</div>
+                    <div class="stat-label-admin">ملفات قيد المراجعة</div>
+                </div>
+                <div class="stat-card-admin">
+                    <div class="stat-value-admin" id="banned-users">0</div>
+                    <div class="stat-label-admin">مستخدمين محظورين</div>
+                </div>
+                <div class="stat-card-admin">
+                    <div class="stat-value-admin" id="total-users">0</div>
+                    <div class="stat-label-admin">إجمالي المستخدمين</div>
+                </div>
+            </div>
+
+            <!-- التبويبات -->
+            <div class="admin-tabs">
+                <button class="admin-tab-btn active" onclick="switchAdminTab('comments')">💬 التعليقات</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('files')">📁 الملفات المرفوعة</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('users')">👥 المستخدمين</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('library')">📚 مكتبتي</button>
+            </div>
+
+            <!-- تبويب التعليقات -->
+            <div id="comments-tab" class="admin-tab-content active">
+                <div class="admin-card">
+                    <h3>إدارة التعليقات</h3>
+                    <div id="comments-list-admin"></div>
+                </div>
+            </div>
+
+            <!-- تبويب الملفات -->
+            <div id="files-tab" class="admin-tab-content">
+                <div class="admin-card">
+                    <h3>الملفات المرفوعة - قيد المراجعة</h3>
+                    <div id="files-list-admin"></div>
+                </div>
+            </div>
+
+            <!-- تبويب المستخدمين -->
+            <div id="users-tab" class="admin-tab-content">
+                <div class="admin-card">
+                    <h3>إدارة المستخدمين</h3>
+                    <div id="users-list-admin"></div>
+                </div>
+            </div>
+
+            <!-- تبويب المكتبة -->
+            <div id="library-tab" class="admin-tab-content">
+                <div class="admin-card">
+                    <h3>📚 مكتبتي الشخصية</h3>
+                    <p style="color: var(--text-light); margin-bottom: 20px;">يمكنك إضافة المساقات من صفحة المساقات</p>
+                    <div id="admin-library-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="courses-data.js"></script>
+    <script>
+        // التحقق من تسجيل الدخول
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('adminLoggedIn') !== 'true') {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // عرض معلومات المشرف
+            const adminUsername = localStorage.getItem('adminUsername') || 'admin';
+            document.getElementById('admin-username').textContent = adminUsername;
+            document.getElementById('admin-name').textContent = `المشرف: ${adminUsername}`;
+            
+            loadAllData();
+        });
+
+        function loadAllData() {
+            loadComments();
+            loadPendingFiles();
+            loadUsers();
+            loadAdminLibrary();
+            updateStats();
+        }
+
+        function loadAdminLibrary() {
+            const libraryGrid = document.getElementById('admin-library-grid');
+            if (!libraryGrid) return;
+
+            let adminUser = JSON.parse(localStorage.getItem('adminUserData') || 'null');
+            if (!adminUser) {
+                adminUser = {
+                    username: 'admin',
+                    email: 'admin@ptuk.edu.ps',
+                    firstName: 'المشرف',
+                    lastName: 'النظام',
+                    profileImage: 'default',
+                    points: 0,
+                    subscription: true,
+                    myCourses: [],
+                    maxCourses: 999,
+                    paidSlots: 0,
+                    isAdmin: true
+                };
+                localStorage.setItem('adminUserData', JSON.stringify(adminUser));
+            }
+
+            const myCourses = adminUser.myCourses || [];
+
+            if (myCourses.length === 0) {
+                libraryGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-light);">
+                        <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;">📚</div>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 10px; color: var(--text-color);">المكتبة فارغة</h3>
+                        <p style="font-size: 1rem; margin-bottom: 20px;">لم تقم بإضافة أي مساقات إلى مكتبتك بعد</p>
+                        <a href="courses.html" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">تصفح المساقات وإضافة بعضها</a>
+                    </div>
+                `;
+                return;
+            }
+
+            libraryGrid.innerHTML = '';
+
+            myCourses.forEach(courseId => {
+                const course = COURSES_DATABASE.find(c => c.id === courseId);
+                if (!course) return;
+
+                const courseCard = document.createElement('div');
+                courseCard.style.cssText = 'background: var(--dark-bg); padding: 20px; border-radius: 10px; border: 2px solid var(--border-color); transition: all 0.3s; cursor: pointer;';
+                courseCard.innerHTML = `
+                    <h3 style="color: var(--primary-color); margin-bottom: 10px; font-size: 1.2rem;">${course.name}</h3>
+                    <div style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 10px;">${course.code}</div>
+                    <div style="color: var(--text-light); font-size: 0.85rem;">${course.hours} ساعة معتمدة</div>
+                    <button onclick="removeFromAdminLibrary('${course.id}')" style="margin-top: 15px; padding: 8px 15px; background: #ff4444; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; transition: all 0.3s;">
+                        🗑️ إزالة من المكتبة
+                    </button>
+                `;
+                courseCard.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'BUTTON') return;
+                    window.location.href = `course-details.html?id=${course.id}`;
+                });
+                courseCard.addEventListener('mouseenter', function() {
+                    this.style.borderColor = 'var(--primary-color)';
+                    this.style.transform = 'translateY(-5px)';
+                });
+                courseCard.addEventListener('mouseleave', function() {
+                    this.style.borderColor = 'var(--border-color)';
+                    this.style.transform = 'translateY(0)';
+                });
+                libraryGrid.appendChild(courseCard);
+            });
+        }
+
+        function removeFromAdminLibrary(courseId) {
+            if (!confirm('هل أنت متأكد من إزالة هذا المساق من مكتبتك؟')) {
+                return;
+            }
+
+            let adminUser = JSON.parse(localStorage.getItem('adminUserData') || 'null');
+            if (!adminUser) return;
+
+            adminUser.myCourses = (adminUser.myCourses || []).filter(id => id !== courseId);
+            localStorage.setItem('adminUserData', JSON.stringify(adminUser));
+
+            loadAdminLibrary();
+        }
+
+        function updateStats() {
+            // إحصائيات التعليقات
+            const allComments = JSON.parse(localStorage.getItem('courseComments') || '{}');
+            let totalComments = 0;
+            for (let courseId in allComments) {
+                totalComments += allComments[courseId].length;
+            }
+            document.getElementById('total-comments').textContent = totalComments;
+
+            // إحصائيات الملفات
+            const pendingFiles = JSON.parse(localStorage.getItem('pendingFiles') || '[]');
+            document.getElementById('pending-files').textContent = pendingFiles.length;
+
+            // إحصائيات المستخدمين
+            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            document.getElementById('total-users').textContent = users.length;
+
+            // إحصائيات المحظورين
+            const bannedUsers = JSON.parse(localStorage.getItem('bannedUsers') || '[]');
+            document.getElementById('banned-users').textContent = bannedUsers.length;
+        }
+
+        function loadComments() {
+            const commentsList = document.getElementById('comments-list-admin');
+            const allComments = JSON.parse(localStorage.getItem('courseComments') || '{}');
+            
+            let allCommentsArray = [];
+            for (let courseId in allComments) {
+                const course = COURSES_DATABASE.find(c => c.id === courseId);
+                const courseName = course ? course.name : courseId;
+                allComments[courseId].forEach(comment => {
+                    allCommentsArray.push({
+                        ...comment,
+                        courseId: courseId,
+                        courseName: courseName
+                    });
+                });
+            }
+
+            if (allCommentsArray.length === 0) {
+                commentsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💬</div>
+                        <h3>لا توجد تعليقات</h3>
+                    </div>
+                `;
+                return;
+            }
+
+            commentsList.innerHTML = '';
+            allCommentsArray.forEach((comment, index) => {
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'comment-item-admin';
+                commentDiv.innerHTML = `
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">${escapeHtml(comment.author || 'مجهول')}</div>
+                            <div class="item-meta">في: ${comment.courseName} | ${formatDate(comment.date)}</div>
+                        </div>
+                    </div>
+                    <div class="item-content">${escapeHtml(comment.text)}</div>
+                    <div class="action-buttons">
+                        <button class="action-btn delete" onclick="deleteCommentAdmin('${comment.courseId}', ${index})">🗑️ حذف</button>
+                        <button class="action-btn warn" onclick="warnUser('${comment.author || ''}')">⚠️ تحذير</button>
+                        <button class="action-btn ban" onclick="banUser('${comment.author || ''}')">🚫 حظر</button>
+                    </div>
+                `;
+                commentsList.appendChild(commentDiv);
+            });
+        }
+
+        function loadPendingFiles() {
+            const filesList = document.getElementById('files-list-admin');
+            const pendingFiles = JSON.parse(localStorage.getItem('pendingFiles') || '[]');
+
+            if (pendingFiles.length === 0) {
+                filesList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📁</div>
+                        <h3>لا توجد ملفات قيد المراجعة</h3>
+                    </div>
+                `;
+                return;
+            }
+
+            filesList.innerHTML = '';
+            pendingFiles.forEach((file, index) => {
+                const course = COURSES_DATABASE.find(c => c.id === file.courseId);
+                const courseName = course ? course.name : file.courseId;
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'file-item-admin';
+                fileDiv.innerHTML = `
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">${escapeHtml(file.fileName)}</div>
+                            <div class="item-meta">المساق: ${courseName} | رفع من: ${escapeHtml(file.uploadedBy)} | ${formatDate(file.uploadDate)}</div>
+                        </div>
+                    </div>
+                    <div class="item-content">${escapeHtml(file.description || 'لا يوجد وصف')}</div>
+                    <div class="action-buttons">
+                        <button class="action-btn approve" onclick="approveFile(${index})">✅ قبول</button>
+                        <button class="action-btn reject" onclick="rejectFile(${index})">❌ رفض</button>
+                    </div>
+                `;
+                filesList.appendChild(fileDiv);
+            });
+        }
+
+        function loadUsers() {
+            const usersList = document.getElementById('users-list-admin');
+            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const bannedUsers = JSON.parse(localStorage.getItem('bannedUsers') || '[]');
+
+            if (users.length === 0) {
+                usersList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">👥</div>
+                        <h3>لا يوجد مستخدمين</h3>
+                    </div>
+                `;
+                return;
+            }
+
+            usersList.innerHTML = '';
+            users.forEach(user => {
+                const isBanned = bannedUsers.includes(user.username);
+                const userDiv = document.createElement('div');
+                userDiv.className = 'user-item-admin';
+                userDiv.innerHTML = `
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">${escapeHtml(user.username)}</div>
+                            <div class="item-meta">النقاط: ${user.points || 0} | المساقات: ${(user.myCourses || []).length}/${user.maxCourses || 3} | الإيميل: ${user.email || 'غير متوفر'}</div>
+                        </div>
+                        <div style="color: ${isBanned ? '#ff4444' : '#44ff44'}; font-weight: 700;">
+                            ${isBanned ? '🚫 محظور' : '✅ نشط'}
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        ${isBanned ? 
+                            `<button class="action-btn unban" onclick="unbanUser('${user.username}')">✅ إلغاء الحظر</button>` :
+                            `<button class="action-btn ban" onclick="banUser('${user.username}')">🚫 حظر</button>`
+                        }
+                    </div>
+                `;
+                usersList.appendChild(userDiv);
+            });
+        }
+
+        function approveFile(index) {
+            const pendingFiles = JSON.parse(localStorage.getItem('pendingFiles') || '[]');
+            const file = pendingFiles[index];
+            
+            if (!file) return;
+
+            // إضافة النقطة للمستخدم
+            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const userIndex = users.findIndex(u => u.username === file.uploadedBy);
+            
+            if (userIndex !== -1) {
+                users[userIndex].points = (users[userIndex].points || 0) + 1;
+                
+                // إذا وصل إلى 10 نقاط، منح اشتراك مجاني
+                if (users[userIndex].points >= 10 && !users[userIndex].subscription) {
+                    users[userIndex].subscription = true;
+                    alert(`تم منح المستخدم ${file.uploadedBy} اشتراك مجاني لوصوله إلى 10 نقاط!`);
+                }
+                
+                localStorage.setItem('registeredUsers', JSON.stringify(users));
+                
+                // تحديث currentUser إذا كان مسجل دخول
+                const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+                if (currentUser && currentUser.username === file.uploadedBy) {
+                    currentUser.points = users[userIndex].points;
+                    currentUser.subscription = users[userIndex].subscription;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                }
+            }
+
+            // نقل الملف من قائمة الانتظار إلى الملفات المقبولة
+            const approvedFiles = JSON.parse(localStorage.getItem('approvedFiles') || '[]');
+            approvedFiles.push({
+                ...file,
+                approvedDate: new Date().toISOString()
+            });
+            localStorage.setItem('approvedFiles', JSON.stringify(approvedFiles));
+
+            // حذف من قائمة الانتظار
+            pendingFiles.splice(index, 1);
+            localStorage.setItem('pendingFiles', JSON.stringify(pendingFiles));
+
+            alert('تم قبول الملف وإضافة نقطة للمستخدم!');
+            loadPendingFiles();
+            updateStats();
+        }
+
+        function rejectFile(index) {
+            if (!confirm('هل أنت متأكد من رفض هذا الملف؟')) return;
+
+            const pendingFiles = JSON.parse(localStorage.getItem('pendingFiles') || '[]');
+            pendingFiles.splice(index, 1);
+            localStorage.setItem('pendingFiles', JSON.stringify(pendingFiles));
+
+            alert('تم رفض الملف');
+            loadPendingFiles();
+            updateStats();
+        }
+
+        function deleteCommentAdmin(courseId, commentIndex) {
+            if (!confirm('هل أنت متأكد من حذف هذا التعليق؟')) return;
+
+            const allComments = JSON.parse(localStorage.getItem('courseComments') || '{}');
+            if (allComments[courseId]) {
+                allComments[courseId].splice(commentIndex, 1);
+                localStorage.setItem('courseComments', JSON.stringify(allComments));
+            }
+
+            loadComments();
+            updateStats();
+        }
+
+        function warnUser(username) {
+            if (!username) return;
+            alert(`تم إرسال تحذير للمستخدم: ${username}`);
+        }
+
+        function banUser(username) {
+            if (!username) return;
+            if (!confirm(`هل أنت متأكد من حظر المستخدم: ${username}؟`)) return;
+
+            const bannedUsers = JSON.parse(localStorage.getItem('bannedUsers') || '[]');
+            if (!bannedUsers.includes(username)) {
+                bannedUsers.push(username);
+                localStorage.setItem('bannedUsers', JSON.stringify(bannedUsers));
+            }
+
+            alert(`تم حظر المستخدم: ${username}`);
+            loadUsers();
+            updateStats();
+        }
+
+        function unbanUser(username) {
+            if (!confirm(`هل أنت متأكد من إلغاء حظر المستخدم: ${username}؟`)) return;
+
+            const bannedUsers = JSON.parse(localStorage.getItem('bannedUsers') || '[]');
+            const index = bannedUsers.indexOf(username);
+            if (index > -1) {
+                bannedUsers.splice(index, 1);
+                localStorage.setItem('bannedUsers', JSON.stringify(bannedUsers));
+            }
+
+            alert(`تم إلغاء حظر المستخدم: ${username}`);
+            loadUsers();
+            updateStats();
+        }
+
+        function switchAdminTab(tabName) {
+            document.querySelectorAll('.admin-tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function refreshData() {
+            loadAllData();
+            alert('تم تحديث البيانات');
+        }
+
+        function logoutAdmin() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminUsername');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ar-SA', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+
+</html>

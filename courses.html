@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>البحث عن المواد - مساعد</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>مساعد</h1>
+                <p>منصة طلاب الخضوري</p>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="courses.html" class="active">المواد</a></li>
+                <li><a href="tools.html">الأدوات</a></li>
+                <li><a href="activity.html">النشاط</a></li>
+                <li><button class="theme-toggle" onclick="toggleTheme()">🌙</button></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn-login">تسجيل الدخول</a>
+                <a href="register.html" class="btn-register">إنشاء حساب</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="header-content">
+            <h1>البحث عن المواد</h1>
+            <p>ابحث عن المواد الدراسية من أفضل الملفات والموارد المشتركة</p>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="search-container">
+            <h2>ابحث عن مادتك</h2>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="أدخل اسم أو رقم المادة..." class="search-input" oninput="searchCoursesRealtime()">
+            </div>
+            <p class="search-hint" id="search-hint">ابدأ بالكتابة للبحث عن المساق</p>
+        </div>
+    </section>
+
+    <!-- Courses Grid -->
+    <section class="courses-section">
+        <div class="courses-container">
+            <div class="courses-grid" id="courses-grid">
+                <!-- Courses will be loaded here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Share Section -->
+    <section class="share-section">
+        <div class="share-container">
+            <h2>شارك هذه الصفحة</h2>
+            <p>ساعد زملاءك بمشاركة هذه الصفحة معهم</p>
+            <div class="share-buttons">
+                <button class="share-btn facebook" onclick="shareOnFacebook()">📱 فيسبوك</button>
+                <button class="share-btn whatsapp" onclick="shareOnWhatsApp()">💬 واتس آب</button>
+                <button class="share-btn copy" onclick="copyLink()">📋 نسخ الرابط</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>مساعد</h3>
+                <p>منصة مجتمع طلابية</p>
+            </div>
+            <div class="footer-section">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="courses.html">المواد</a></li>
+                    <li><a href="tools.html">الأدوات</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>تابعنا</h4>
+                <ul>
+                    <li><a href="#" target="_blank">فيسبوك</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 مساعد. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script src="courses-data.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Show empty state on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            showEmptyState();
+        });
+
+        function showEmptyState() {
+            const grid = document.getElementById('courses-grid');
+            grid.innerHTML = `
+                <div class="empty-search-state">
+                    <div class="empty-state-icon">🔍</div>
+                    <h3>ابدأ البحث عن المساق</h3>
+                    <p>أدخل اسم أو رقم المساق في خانة البحث أعلاه</p>
+                    <p class="hint">مثال: اللغة العربية أو 15200102</p>
+                </div>
+            `;
+        }
+
+        function displayCourses(courses) {
+            const grid = document.getElementById('courses-grid');
+            
+            if (courses.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results-found">
+                        <div class="no-results-icon">❌</div>
+                        <h3>لم يتم العثور على نتائج</h3>
+                        <p>حاول البحث بطريقة مختلفة أو استخدم رقم المساق</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = courses.map(course => `
+                <div class="course-card" data-category="${course.category}">
+                    <a href="course-details.html?id=${course.id}" style="text-decoration: none; color: inherit;">
+                        <div class="course-header-card">
+                            <h3 class="course-name">${course.name}</h3>
+                            <span class="course-code">${course.id}</span>
+                        </div>
+                        <div class="course-body">
+                            <div class="course-info">
+                                <span class="course-hours">${course.hours} ساعات</span>
+                                <span class="course-category">${course.category}</span>
+                            </div>
+                            <p class="course-description">انقر لعرض التفاصيل والموارد</p>
+                        </div>
+                    </a>
+                    <div class="course-footer" style="display: flex; gap: 10px; padding: 15px;">
+                        <a href="course-details.html?id=${course.id}" class="btn-primary" style="flex: 1; text-align: center; text-decoration: none;">عرض</a>
+                        <button class="btn-secondary" onclick="addToMyCourses('${course.id}')" style="flex: 1;">➕ إضافة لمكتبتي</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function searchCourses() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            
+            const filteredCourses = Object.values(COURSES_DATABASE).filter(course => 
+                course.name.includes(searchTerm) || 
+                course.id.includes(searchTerm)
+            );
+
+            displayCourses(filteredCourses);
+        }
+
+        function searchCoursesRealtime() {
+            const searchInput = document.getElementById('search-input');
+            const searchTerm = searchInput.value.toLowerCase();
+            const searchHint = document.getElementById('search-hint');
+            
+            // إذا كانت خانة البحث فارغة، اعرض الحالة الفارغة
+            if (!searchTerm.trim()) {
+                showEmptyState();
+                searchHint.textContent = 'ابدأ بالكتابة للبحث عن المساق';
+                return;
+            }
+            
+            // البحث الفوري
+            const filteredCourses = Object.values(COURSES_DATABASE).filter(course => 
+                course.name.includes(searchTerm) || 
+                course.id.includes(searchTerm)
+            );
+            
+            // تحديث نص التلميح
+            if (filteredCourses.length === 0) {
+                searchHint.textContent = `لم يتم العثور على مساقات تحتوي على "${searchTerm}"`;
+            } else {
+                searchHint.textContent = `عثرنا على ${filteredCourses.length} مساق`;
+            }
+            
+            displayCourses(filteredCourses);
+        }
+
+        function filterByCategory(category) {
+            const courses = category === 'all' 
+                ? Object.values(COURSES_DATABASE)
+                : Object.values(COURSES_DATABASE).filter(c => c.category === category);
+            
+            displayCourses(courses);
+        }
+
+        function viewCourseMini(courseCode) {
+            window.location.href = `course-details.html?id=${courseCode}`;
+        }
+
+        function shareOnFacebook() {
+            const url = window.location.href;
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+        }
+
+        function shareOnWhatsApp() {
+            const url = window.location.href;
+            const text = 'تحقق من صفحة البحث عن المواد في مساعد!';
+            window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
+        }
+
+        function copyLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('تم نسخ الرابط بنجاح!');
+            });
+        }
+
+        function updateResultsInfo(visibleCount, totalCount) {
+            const resultsCountEl = document.getElementById('results-count');
+            const noResultsEl = document.getElementById('no-results');
+            
+            if (visibleCount === 0) {
+                resultsCountEl.textContent = 'لم يتم العثور على نتائج';
+                noResultsEl.style.display = 'block';
+            } else {
+                resultsCountEl.textContent = `يتم عرض ${visibleCount} من ${totalCount} المواد`;
+                noResultsEl.style.display = 'none';
+            }
+        }
+
+        function viewCourse(courseCode) {
+            window.location.href = `course-details.html?id=${courseCode}`;
+        }
+
+        function downloadCourse(courseCode) {
+            alert(`تم بدء تحميل المادة: ${courseCode}`);
+        }
+
+        function addToMyCourses(courseId) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            if (!currentUser) {
+                if (confirm('يجب تسجيل الدخول أولاً. هل تريد الانتقال لصفحة تسجيل الدخول؟')) {
+                    window.location.href = 'login.html';
+                }
+                return;
+            }
+
+            const myCourses = JSON.parse(localStorage.getItem('my-courses-' + currentUser.username) || '[]');
+            if (myCourses.includes(courseId)) {
+                alert('هذه المادة موجودة بالفعل في مكتبتك!');
+                return;
+            }
+
+            myCourses.push(courseId);
+            localStorage.setItem('my-courses-' + currentUser.username, JSON.stringify(myCourses));
+            alert('✓ تمت إضافة المادة لمكتبتك الشخصية بنجاح!');
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رفع ملف - مساعد</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .upload-page {
+            min-height: 100vh;
+            padding: 40px 20px;
+            background: var(--dark-bg);
+        }
+
+        .upload-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .upload-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .upload-header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .upload-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .upload-card {
+            background: var(--light-bg);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .course-select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--dark-bg);
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .course-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(107, 107, 84, 0.2);
+        }
+
+        .file-upload-area {
+            border: 3px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 60px 20px;
+            text-align: center;
+            background: var(--dark-bg);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary-color);
+            background: rgba(107, 107, 84, 0.05);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--primary-color);
+            background: rgba(107, 107, 84, 0.1);
+        }
+
+        .upload-icon-large {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .file-upload-area h3 {
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .file-upload-area p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .file-input-hidden {
+            display: none;
+        }
+
+        .upload-btn-custom {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .upload-btn-custom:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(107, 107, 84, 0.3);
+        }
+
+        .selected-file {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            border: 2px solid var(--primary-color);
+            display: none;
+        }
+
+        .selected-file.show {
+            display: block;
+        }
+
+        .file-info-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .file-icon-display {
+            font-size: 2.5rem;
+        }
+
+        .file-details {
+            flex: 1;
+        }
+
+        .file-name-display {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .file-size-display {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .remove-file-btn {
+            padding: 8px 15px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .submit-upload-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 30px;
+        }
+
+        .submit-upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(107, 107, 84, 0.3);
+        }
+
+        .submit-upload-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .points-info {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .points-info h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .points-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .success-message-upload {
+            background: #22c55e;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message-upload.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .upload-card {
+                padding: 25px 15px;
+            }
+
+            .upload-header h1 {
+                font-size: 2rem;
+            }
+
+            .file-upload-area {
+                padding: 40px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>مساعد</h1>
+                <p>منصة طلاب الخضوري</p>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="courses.html">المواد</a></li>
+                <li><a href="tools.html">الأدوات</a></li>
+                <li><a href="activity.html">النشاط</a></li>
+                <li><button class="theme-toggle" onclick="toggleTheme()">🌙</button></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="profile.html" class="btn-login">الملف الشخصي</a>
+                <a href="login.html" class="btn-register">تسجيل الدخول</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="upload-page">
+        <div class="upload-container">
+            <div class="upload-header">
+                <h1>📤 رفع ملف</h1>
+                <p>شارك المواد الدراسية مع زملائك واحصل على نقاط</p>
+            </div>
+
+            <div class="points-info" id="points-info">
+                <h3>نقاطك الحالية</h3>
+                <div class="points-value" id="user-points">0</div>
+                <p>كل ملف معتمد = نقطة واحدة | 10 نقاط = اشتراك مجاني</p>
+            </div>
+
+            <div class="upload-card">
+                <form id="upload-form" onsubmit="handleFileUpload(event)">
+                    <div class="form-section">
+                        <label for="course-select">اختر المادة</label>
+                        <select id="course-select" class="course-select" required>
+                            <option value="">-- اختر المادة --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-section">
+                        <label>رفع الملف</label>
+                        <div class="file-upload-area" id="file-upload-area" onclick="document.getElementById('file-input').click()">
+                            <div class="upload-icon-large">📁</div>
+                            <h3>اسحب الملف هنا أو اضغط للاختيار</h3>
+                            <p>يدعم: PDF, Word, PowerPoint, Images</p>
+                            <label for="file-input" class="upload-btn-custom">اختر الملف</label>
+                            <input type="file" id="file-input" class="file-input-hidden" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.gif" required>
+                        </div>
+
+                        <div class="selected-file" id="selected-file">
+                            <div class="file-info-display">
+                                <div class="file-icon-display">📄</div>
+                                <div class="file-details">
+                                    <div class="file-name-display" id="file-name-display"></div>
+                                    <div class="file-size-display" id="file-size-display"></div>
+                                </div>
+                                <button type="button" class="remove-file-btn" onclick="removeSelectedFile()">إزالة</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-upload-btn" id="submit-btn">
+                        📤 رفع الملف
+                    </button>
+
+                    <div class="success-message-upload" id="success-message">
+                        ✅ تم رفع الملف بنجاح! سيتم مراجعته من قبل المشرف وإضافة نقطة لك عند الموافقة عليه.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="courses-data.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Load courses into select
+        function loadCourses() {
+            const courseSelect = document.getElementById('course-select');
+            if (typeof COURSES_DATABASE !== 'undefined') {
+                Object.keys(COURSES_DATABASE).forEach(courseId => {
+                    const course = COURSES_DATABASE[courseId];
+                    const option = document.createElement('option');
+                    option.value = courseId;
+                    option.textContent = `${course.name} (${courseId})`;
+                    courseSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Load user points
+        function loadUserPoints() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            if (currentUser) {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = users.find(u => u.username === currentUser.username);
+                if (user) {
+                    document.getElementById('user-points').textContent = user.points || 0;
+                }
+            }
+        }
+
+        // File input change
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                displaySelectedFile(file);
+            }
+        });
+
+        // Drag and drop
+        const uploadArea = document.getElementById('file-upload-area');
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', function() {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                document.getElementById('file-input').files = e.dataTransfer.files;
+                displaySelectedFile(file);
+            }
+        });
+
+        function displaySelectedFile(file) {
+            const selectedFileDiv = document.getElementById('selected-file');
+            const fileNameDisplay = document.getElementById('file-name-display');
+            const fileSizeDisplay = document.getElementById('file-size-display');
+
+            fileNameDisplay.textContent = file.name;
+            fileSizeDisplay.textContent = formatFileSize(file.size);
+            selectedFileDiv.classList.add('show');
+        }
+
+        function removeSelectedFile() {
+            document.getElementById('file-input').value = '';
+            document.getElementById('selected-file').classList.remove('show');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        function handleFileUpload(event) {
+            event.preventDefault();
+
+            const courseId = document.getElementById('course-select').value;
+            const fileInput = document.getElementById('file-input');
+            const file = fileInput.files[0];
+
+            if (!courseId || !file) {
+                alert('الرجاء اختيار المادة والملف');
+                return;
+            }
+
+            // Get current user
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            if (!currentUser) {
+                alert('الرجاء تسجيل الدخول أولاً');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Create file object
+            const fileData = {
+                id: Date.now().toString(),
+                fileName: file.name,
+                fileSize: file.size,
+                fileType: file.type,
+                courseId: courseId,
+                uploadedBy: currentUser.username,
+                uploadDate: new Date().toISOString(),
+                status: 'pending',
+                file: file // Note: In real app, this would be uploaded to server
+            };
+
+            // Add to pending files
+            const pendingFiles = JSON.parse(localStorage.getItem('pending-files') || '[]');
+            pendingFiles.push(fileData);
+            localStorage.setItem('pending-files', JSON.stringify(pendingFiles));
+
+            // Show success message
+            const successMsg = document.getElementById('success-message');
+            successMsg.classList.add('show');
+
+            // Reset form
+            document.getElementById('upload-form').reset();
+            document.getElementById('selected-file').classList.remove('show');
+
+            // Scroll to success message
+            successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                successMsg.classList.remove('show');
+            }, 5000);
+
+            // Send notification to admin (simulated)
+            console.log('إشعار للمشرف: تم رفع ملف جديد للمراجعة');
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadCourses();
+            loadUserPoints();
+        });
+    </script>
+</body>
+
+</html>
+

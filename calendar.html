@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقويم الأكاديمي - مساعد</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .calendar-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 40px;
+        }
+
+        .calendar-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .calendar-title h1 {
+            color: var(--primary-color);
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .calendar-title p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .last-update {
+            font-size: 13px;
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .calendar-options {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .semester-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--primary-color);
+            background: transparent;
+            color: var(--primary-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .semester-btn:hover,
+        .semester-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .calendar-grid {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .calendar-event {
+            background: var(--light-bg);
+            border-right: 4px solid var(--primary-color);
+            padding: 20px;
+            border-radius: 8px;
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 20px;
+            align-items: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(107, 107, 84, 0.1);
+        }
+
+        [data-theme="dark"] .calendar-event {
+            border-color: rgba(107, 107, 84, 0.3);
+        }
+
+        .calendar-event:hover {
+            box-shadow: 0 5px 20px rgba(107, 107, 84, 0.15);
+            transform: translateX(-5px);
+        }
+
+        .event-date {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-color), #7a7a64);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .event-day {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .event-month {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .event-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .event-content p {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .event-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .event-status.upcoming {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .event-status.current {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .event-status.past {
+            background: rgba(156, 163, 175, 0.1);
+            color: #6b7280;
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 40px;
+            padding: 25px;
+            background: var(--light-bg);
+            border-radius: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-indicator {
+            width: 4px;
+            height: 40px;
+            border-radius: 2px;
+        }
+
+        .legend-indicator.upcoming {
+            background: var(--primary-color);
+        }
+
+        .legend-indicator.current {
+            background: #22c55e;
+        }
+
+        .legend-indicator.past {
+            background: #9ca3af;
+        }
+
+        .legend-text {
+            font-size: 14px;
+        }
+
+        .legend-text strong {
+            display: block;
+            color: var(--text-dark);
+            margin-bottom: 3px;
+        }
+
+        .legend-text span {
+            color: var(--text-light);
+            font-size: 12px;
+        }
+
+        .source-link {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: 8px;
+        }
+
+        .source-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .source-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .calendar-event {
+                grid-template-columns: 1fr;
+            }
+
+            .event-date {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                align-items: center;
+                text-align: left;
+            }
+
+            .event-day {
+                font-size: 20px;
+            }
+
+            .calendar-container {
+                padding: 20px;
+            }
+
+            .calendar-title h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>مساعد</h1>
+                <p>منصة طلاب الخضوري</p>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="courses.html">المواد</a></li>
+                <li><a href="tools.html">الأدوات</a></li>
+                <li><a href="activity.html">النشاط</a></li>
+                <li><button class="theme-toggle" onclick="toggleTheme()">🌙</button></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn-login">تسجيل الدخول</a>
+                <a href="register.html" class="btn-register">إنشاء حساب</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="header-content">
+            <h1>📅 التقويم الأكاديمي</h1>
+            <p>مواعيد الدراسة والامتحانات والعطل الجامعية</p>
+        </div>
+    </section>
+
+    <!-- Calendar Container -->
+    <section class="calendar-container">
+        <div class="calendar-title">
+            <h1>التقويم الأكاديمي للعام الجامعي 2025 - 2026</h1>
+            <p>جامعة الخضوري - فرع الضفة الغربية</p>
+            <div class="last-update">
+                آخر تحديث: <span id="updateTime">يتم تحديثه تلقائياً</span>
+            </div>
+        </div>
+
+        <!-- Semester Options -->
+        <div class="calendar-options">
+            <button class="semester-btn active" onclick="filterSemester('all')">جميع الفصول</button>
+            <button class="semester-btn" onclick="filterSemester('fall')">الفصل الاول</button>
+            <button class="semester-btn" onclick="filterSemester('spring')">الفصل الثاني</button>
+            <button class="semester-btn" onclick="filterSemester('summer')">الفصل الصيفي</button>
+        </div>
+
+        <!-- Calendar Events -->
+        <div class="calendar-grid" id="calendarGrid">
+            <!-- Events will be populated by JavaScript -->
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-indicator upcoming"></div>
+                <div class="legend-text">
+                    <strong>قادم</strong>
+                    <span>الأحداث المنتظرة</span>
+                </div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-indicator current"></div>
+                <div class="legend-text">
+                    <strong>جاري الآن</strong>
+                    <span>الأحداث الحالية</span>
+                </div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-indicator past"></div>
+                <div class="legend-text">
+                    <strong>انقضى</strong>
+                    <span>الأحداث الماضية</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Source Link -->
+        <div class="source-link">
+            <p>🔗 البيانات من <a href="https://ptuk.edu.ps/ar/academic-calendar.php" target="_blank">الموقع الرسمي لجامعة الخضوري</a></p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>مساعد</h3>
+                <p>منصة مجتمع طلابية</p>
+            </div>
+            <div class="footer-section">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="courses.html">المواد</a></li>
+                    <li><a href="calendar.html">التقويم</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>تابعنا</h4>
+                <ul>
+                    <li><a href="#" target="_blank">فيسبوك</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 مساعد. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Academic calendar events from PTUK official website
+        // https://ptuk.edu.ps/ar/academic-calendar.php
+        const calendarEvents = [
+            // Fall Semester 2025-2026
+            { date: '2025-09-14', title: 'بِدء العام الأكاديمي 2025-2026', description: '🎓 بدء العام الأكاديمي والتسجيل', semester: 'fall', duration: 5 },
+            { date: '2025-09-21', title: 'أُسبوع السحب والإضافة', description: '📝 آخر موعد للسحب والإضافة', semester: 'fall', duration: 5 },
+            { date: '2025-11-02', title: 'الامتحانات النصفيّة العمليّة', description: '✏️ بدء امتحانات منتصف الفصل', semester: 'fall', duration: 5 },
+            { date: '2025-11-09', title: 'الامتحانات النصفيّة النظريّة', description: '✏️ امتحانات نصفية نظرية', semester: 'fall', duration: 5 },
+            { date: '2025-12-21', title: 'الامتحانات النهائيّة العمليّة', description: '📋 بدء الامتحانات النهائية', semester: 'fall', duration: 8 },
+            { date: '2026-01-03', title: 'الامتحانات النهائيّة النظريّة', description: '📋 امتحانات نظرية نهائية', semester: 'fall', duration: 13 },
+            { date: '2026-01-24', title: 'إعلان النتائج ونهاية الفصل الأوّل', description: '✅ نهاية الفصل الدراسي الأول', semester: 'fall', duration: 1 },
+            
+            // Spring Semester 2026
+            { date: '2026-01-25', title: 'التسجيل للفصل الدّراسي الثّاني', description: '📝 بدء التسجيل للفصل الثاني', semester: 'spring', duration: 6 },
+            { date: '2026-02-01', title: 'أُسبوع السحب والإضافة', description: '📝 آخر موعد للسحب والإضافة', semester: 'spring', duration: 5 },
+            { date: '2026-03-15', title: 'الامتحانات النصفيّة العمليّة', description: '✏️ بدء امتحانات منتصف الفصل', semester: 'spring', duration: 5 },
+            { date: '2026-03-23', title: 'الامتحانات النصفيّة النظريّة', description: '✏️ امتحانات نصفية نظرية', semester: 'spring', duration: 7 },
+            { date: '2026-05-03', title: 'الامتحانات النهائية العملية', description: '📋 بدء الامتحانات النهائية', semester: 'spring', duration: 5 },
+            { date: '2026-05-09', title: 'الامتحانات النهائية النظرية', description: '📋 امتحانات نظرية نهائية', semester: 'spring', duration: 13 },
+            { date: '2026-06-06', title: 'إعلان النتائج ونهاية الفصل الثّاني', description: '✅ نهاية الفصل الدراسي الثاني', semester: 'spring', duration: 1 },
+            
+            // Summer Semester 2026
+            { date: '2026-06-07', title: 'التسجيل للفصل الدّراسي الصيفي', description: '☀️ بدء التسجيل للفصل الصيفي', semester: 'summer', duration: 5 },
+            { date: '2026-06-14', title: 'فترة السحب والإضافة', description: '📝 آخر موعد للسحب والإضافة', semester: 'summer', duration: 5 },
+            { date: '2026-07-05', title: 'الامتحانات النصفيّة العمليّة', description: '✏️ بدء امتحانات منتصف الفصل', semester: 'summer', duration: 5 },
+            { date: '2026-07-12', title: 'الامتحانات النصفيّة النظريّة', description: '✏️ امتحانات نصفية نظرية', semester: 'summer', duration: 5 },
+            { date: '2026-07-26', title: 'الامتحانات النهائيّة العمليّة', description: '📋 بدء الامتحانات النهائية', semester: 'summer', duration: 5 },
+            { date: '2026-08-01', title: 'الامتحانات النهائيّة النظريّة', description: '📋 امتحانات نظرية نهائية', semester: 'summer', duration: 6 },
+            { date: '2026-08-13', title: 'إعلان النتائج وانتهاء العام الأكاديمي', description: '✅ نهاية العام الأكاديمي', semester: 'summer', duration: 1 }
+        ];
+
+        // Function to get event status based on current date
+        function getEventStatus(eventDate, durationDays = 1) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            const event = new Date(eventDate);
+            event.setHours(0, 0, 0, 0);
+            
+            const eventEnd = new Date(event);
+            eventEnd.setDate(eventEnd.getDate() + durationDays - 1);
+            
+            if (today > eventEnd) {
+                return 'past';
+            } else if (today >= event && today <= eventEnd) {
+                return 'current';
+            } else {
+                return 'upcoming';
+            }
+        }
+
+        // Function to format date
+        function formatDate(dateString) {
+            const date = new Date(dateString + 'T00:00:00');
+            const days = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+            const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+            
+            return {
+                day: date.getDate(),
+                month: months[date.getMonth()],
+                dayName: days[date.getDay()]
+            };
+        }
+
+        // Function to render calendar events
+        function renderCalendarEvents(semesterFilter = 'all') {
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            
+            calendarEvents.forEach(event => {
+                // Filter by semester
+                if (semesterFilter !== 'all' && event.semester !== semesterFilter) {
+                    return;
+                }
+                
+                const status = getEventStatus(event.date, event.duration || 1);
+                const dateInfo = formatDate(event.date);
+                
+                const eventElement = document.createElement('div');
+                eventElement.className = 'calendar-event';
+                eventElement.setAttribute('data-semester', event.semester);
+                eventElement.innerHTML = `
+                    <div class="event-date">
+                        <div class="event-day">${dateInfo.day}</div>
+                        <div class="event-month">${dateInfo.month}</div>
+                    </div>
+                    <div class="event-content">
+                        <h3>${event.title}</h3>
+                        <p>${event.description}</p>
+                        <span class="event-status ${status}">
+                            ${status === 'past' ? '✓ انقضى' : status === 'current' ? '● جاري الآن' : '► قادم'}
+                        </span>
+                    </div>
+                `;
+                
+                grid.appendChild(eventElement);
+            });
+
+            // Update time
+            updateTime();
+        }
+
+        // Function to update display time
+        function updateTime() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('updateTime').textContent = now.toLocaleDateString('ar-SA', options);
+        }
+
+        // Function to filter events by semester
+        function filterSemester(semester) {
+            // Update active button
+            document.querySelectorAll('.semester-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Re-render events
+            renderCalendarEvents(semester);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCalendarEvents('all');
+        });
+
+        // Auto-refresh every minute to update event status
+        setInterval(() => {
+            const activeBtn = document.querySelector('.semester-btn.active');
+            const semester = activeBtn && activeBtn.getAttribute('onclick') ? activeBtn.getAttribute('onclick').match(/'(\w+)'/)[1] : 'all';
+            renderCalendarEvents(semester);
+        }, 60000); // Refresh every minute
+    </script>
+</body>
+
+</html>

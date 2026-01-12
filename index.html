@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مساعد - منصة لمساعدة طلاب جامعة الخضوري</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>مساعد</h1>
+                <p>منصة طلاب الخضوري</p>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">الرئيسية</a></li>
+                <li><a href="courses.html">المواد</a></li>
+                <li><a href="tools.html">الأدوات</a></li>
+                <li><a href="activity.html">النشاط</a></li>
+                <li><button class="lang-toggle" onclick="toggleLanguage()">English</button></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn-login">تسجيل الدخول</a>
+                <a href="register.html" class="btn-register">إنشاء حساب</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>أهلاً وسهلاً بك في مساعد</h2>
+            <p>منصة المجتمع الطلابي الخاص بك</p>
+            <p class="subtitle">شارك الموارد، ابحث عن المواد الدراسية، تواصل مع زملائك، وتفوق في دراستك</p>
+            <div class="hero-buttons">
+                <a href="register.html" class="btn-primary">انضم الآن</a>
+                <a href="#features" class="btn-secondary">تعرّف أكثر</a>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <h3>100+</h3>
+                <p>المواد</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <h2>ميزات المنصة</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h3>المشاركة والتحميل</h3>
+                <p>ارفع المواد الدراسية وحمّل الموارد المشتركة من قبل الطلاب الآخرين</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>البحث عن المواد</h3>
+                <p>ابحث واستعرض المواد الدراسية لجميع المقررات المتاحة</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>حاسبة الدرجات</h3>
+                <p>احسب درجتك النهائية والعلامات الدراسية بسهولة</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>حاسبة الرسوم</h3>
+                <p>احسب رسومك الجامعية والمتطلبات المالية</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>خلاصة النشاط</h3>
+                <p>تابع نشاط المجتمع والملفات الجديدة في الوقت الفعلي</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions Section -->
+    <section class="quick-actions">
+        <h2>وصول سريع</h2>
+        <div class="actions-grid">
+            <a href="tools.html#upload" class="action-card">
+                <span class="action-icon">⬆️</span>
+                <span>رفع ملف</span>
+            </a>
+            <a href="courses.html" class="action-card">
+                <span class="action-icon">🔎</span>
+                <span>البحث عن المواد</span>
+            </a>
+            <a href="tools.html#grade-calc" class="action-card">
+                <span class="action-icon">📐</span>
+                <span>حاسبة الدرجات</span>
+            </a>
+            <a href="tools.html#fee-calc" class="action-card">
+                <span class="action-icon">💳</span>
+                <span>حاسبة الرسوم</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Poll Section -->
+    <section id="poll" class="poll-section">
+        <h2>كيف تقيّم تجربتك معنا؟</h2>
+        <p>ساعدنا في التحسين من خلال مشاركة آرائك</p>
+        <div class="poll-options">
+            <button class="poll-btn" data-rating="1">😞 سيء جداً</button>
+            <button class="poll-btn" data-rating="2">😕 سيء</button>
+            <button class="poll-btn" data-rating="3">😐 محايد</button>
+            <button class="poll-btn" data-rating="4">😊 جيد</button>
+            <button class="poll-btn" data-rating="5">😍 ممتاز</button>
+        </div>
+        <p id="poll-message" class="poll-message"></p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>مساعد</h3>
+                <p>منصة مجتمع طلابية </p>
+            </div>
+            <div class="footer-section">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="courses.html">المواد</a></li>
+                    <li><a href="activity.html">النشاط</a></li>
+                    <li><a href="tools.html">الأدوات</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>تابعنا</h4>
+                <ul>
+                    <li><a href="#" target="_blank">فيسبوك</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 مساعد. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

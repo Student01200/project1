@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - مساعد</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--dark-bg);
+            padding: 20px;
+        }
+
+        .login-container {
+            background: var(--light-bg);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
+            width: 100%;
+            border: 2px solid var(--border-color);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .login-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--dark-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .user-type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .user-type-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--dark-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .user-type-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: -10px;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .remember-me label {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .login-btn {
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background: #ff4444;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            margin-bottom: 15px;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #44ff44;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            margin-bottom: 15px;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .login-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .admin-hint {
+            background: rgba(99, 102, 241, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-align: center;
+            border: 1px dashed var(--border-color);
+        }
+
+        .account-status {
+            background: rgba(99, 102, 241, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .account-status h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .account-status p {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            margin: 5px 0;
+        }
+
+        .account-status a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .account-status a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-page">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="login-icon">🔐</div>
+                <h1>تسجيل الدخول</h1>
+                <p>مرحباً بك في منصة مساعد</p>
+            </div>
+
+            <!-- حالة الحساب المفتوح -->
+            <div class="account-status" id="account-status" style="display: none;">
+                <h3>✅ حساب مفتوح حالياً</h3>
+                <p id="logged-in-info"></p>
+                <a href="#" id="view-account-link">عرض معلومات الحساب</a> | 
+                <a href="#" onclick="logoutCurrent()">تسجيل الخروج</a>
+            </div>
+
+            <div class="error-message" id="error-message"></div>
+            <div class="success-message" id="success-message"></div>
+
+            <div class="user-type-selector">
+                <button class="user-type-btn active" onclick="selectUserType('user')" id="user-type-btn">
+                    👤 مستخدم
+                </button>
+                <button class="user-type-btn" onclick="selectUserType('admin')" id="admin-type-btn">
+                    🔧 مشرف
+                </button>
+            </div>
+
+            <form class="login-form" id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">اسم المستخدم</label>
+                    <input type="text" id="username" name="username" required autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">كلمة المرور</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                </div>
+
+                <div class="remember-me">
+                    <input type="checkbox" id="remember-me" name="remember-me">
+                    <label for="remember-me">تذكر معلومات الدخول</label>
+                </div>
+
+                <button type="submit" class="login-btn">تسجيل الدخول</button>
+            </form>
+
+            <div class="admin-hint" id="admin-hint" style="display: none;">
+                <strong>معلومات تسجيل الدخول للمشرف:</strong><br>
+                اسم المستخدم: <code>admin</code><br>
+                كلمة المرور: <code>admin123</code>
+            </div>
+
+            <div class="login-footer">
+                <p>ليس لديك حساب؟ <a href="register.html">إنشاء حساب جديد</a></p>
+                <p style="margin-top: 10px;"><a href="index.html">تصفح الموقع كزائر</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUserType = 'user';
+
+        // التحقق من تسجيل الدخول المحفوظ
+        window.addEventListener('DOMContentLoaded', () => {
+            checkSavedLogin();
+            checkCurrentSession();
+        });
+
+        function checkSavedLogin() {
+            const savedLogin = localStorage.getItem('savedLogin');
+            if (savedLogin) {
+                const loginData = JSON.parse(savedLogin);
+                document.getElementById('username').value = loginData.username || '';
+                if (loginData.rememberMe) {
+                    document.getElementById('remember-me').checked = true;
+                }
+            }
+        }
+
+        function checkCurrentSession() {
+            const adminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+            const userLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            
+            if (adminLoggedIn) {
+                const adminUsername = localStorage.getItem('adminUsername') || 'admin';
+                showAccountStatus('admin', adminUsername);
+            } else if (userLoggedIn) {
+                const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+                if (currentUser.username) {
+                    showAccountStatus('user', currentUser.username);
+                }
+            }
+        }
+
+        function showAccountStatus(type, username) {
+            const accountStatus = document.getElementById('account-status');
+            const loggedInInfo = document.getElementById('logged-in-info');
+            const viewAccountLink = document.getElementById('view-account-link');
+            
+            accountStatus.style.display = 'block';
+            loggedInInfo.textContent = `مسجل دخول كـ ${type === 'admin' ? 'مشرف' : 'مستخدم'}: ${username}`;
+            if (type === 'admin') {
+                viewAccountLink.href = 'admin-dashboard.html';
+                viewAccountLink.textContent = 'عرض لوحة تحكم المشرف';
+            } else {
+                viewAccountLink.href = 'user-dashboard.html';
+                viewAccountLink.textContent = 'عرض معلومات الحساب';
+            }
+        }
+
+        function logoutCurrent() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('userLoggedIn');
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('adminUsername');
+                window.location.reload();
+            }
+        }
+
+        function selectUserType(type) {
+            currentUserType = type;
+            const userBtn = document.getElementById('user-type-btn');
+            const adminBtn = document.getElementById('admin-type-btn');
+            const adminHint = document.getElementById('admin-hint');
+
+            if (type === 'user') {
+                userBtn.classList.add('active');
+                adminBtn.classList.remove('active');
+                adminHint.style.display = 'none';
+            } else {
+                adminBtn.classList.add('active');
+                userBtn.classList.remove('active');
+                adminHint.style.display = 'block';
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            const successDiv = document.getElementById('success-message');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            successDiv.classList.remove('show');
+        }
+
+        function showSuccess(message) {
+            const errorDiv = document.getElementById('error-message');
+            const successDiv = document.getElementById('success-message');
+            successDiv.textContent = message;
+            successDiv.classList.add('show');
+            errorDiv.classList.remove('show');
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('remember-me').checked;
+
+            if (!username || !password) {
+                showError('يرجى إدخال اسم المستخدم وكلمة المرور');
+                return;
+            }
+
+            // حفظ معلومات الدخول إذا طلب المستخدم
+            if (rememberMe) {
+                localStorage.setItem('savedLogin', JSON.stringify({
+                    username: username,
+                    rememberMe: true
+                }));
+            } else {
+                localStorage.removeItem('savedLogin');
+            }
+
+            if (currentUserType === 'admin') {
+                // تسجيل دخول المشرف
+                if (username === 'admin' && password === 'admin123') {
+                    localStorage.setItem('adminLoggedIn', 'true');
+                    localStorage.setItem('adminUsername', username);
+                    showSuccess('تم تسجيل الدخول بنجاح! جاري التوجيه...');
+                    setTimeout(() => {
+                        window.location.href = 'admin-dashboard.html';
+                    }, 1000);
+                } else {
+                    showError('اسم المستخدم أو كلمة المرور غير صحيحة للمشرف');
+                }
+            } else {
+                // تسجيل دخول المستخدم
+                const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                const user = users.find(u => u.username === username && u.password === password);
+
+                if (user) {
+                    localStorage.setItem('userLoggedIn', 'true');
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        username: user.username,
+                        email: user.email,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        middleName: user.middleName,
+                        profileImage: user.profileImage,
+                        points: user.points || 0,
+                        subscription: user.subscription || false,
+                        myCourses: user.myCourses || [],
+                        maxCourses: user.maxCourses || 3,
+                        paidSlots: user.paidSlots || 0
+                    }));
+                    showSuccess('تم تسجيل الدخول بنجاح! جاري التوجيه...');
+                    setTimeout(() => {
+                        window.location.href = 'user-dashboard.html';
+                    }, 1000);
+                } else {
+                    showError('اسم المستخدم أو كلمة المرور غير صحيحة');
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

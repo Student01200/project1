@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل دخول المشرف - مساعد</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 20px;
+        }
+
+        .admin-login-box {
+            background: var(--light-bg);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .admin-login-box h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .admin-login-box p {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .admin-form-group {
+            margin-bottom: 20px;
+        }
+
+        .admin-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .admin-form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--dark-bg);
+            color: var(--text-dark);
+            transition: all 0.3s;
+        }
+
+        .admin-form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(107, 107, 84, 0.2);
+        }
+
+        .admin-submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .admin-submit-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(107, 107, 84, 0.3);
+        }
+
+        .back-to-home {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-to-home a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-to-home a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-login-container">
+        <div class="admin-login-box">
+            <h1>🔐 تسجيل دخول المشرف</h1>
+            <p>لوحة تحكم إدارة المنصة</p>
+            
+            <div class="error-message" id="error-message"></div>
+            
+            <form id="admin-login-form" onsubmit="handleAdminLogin(event)">
+                <div class="admin-form-group">
+                    <label for="admin-id">رقم المشرف</label>
+                    <input type="text" id="admin-id" required placeholder="أدخل رقم المشرف">
+                </div>
+                
+                <div class="admin-form-group">
+                    <label for="admin-password">كلمة المرور</label>
+                    <input type="password" id="admin-password" required placeholder="أدخل كلمة المرور">
+                </div>
+                
+                <button type="submit" class="admin-submit-btn">دخول</button>
+            </form>
+            
+            <div class="back-to-home">
+                <a href="index.html">← العودة للصفحة الرئيسية</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Admin credentials (in production, this should be on the server)
+        const ADMIN_CREDENTIALS = {
+            id: 'ADMIN2026',
+            password: 'Admin@2026'
+        };
+
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            
+            const adminId = document.getElementById('admin-id').value;
+            const adminPassword = document.getElementById('admin-password').value;
+            const errorMsg = document.getElementById('error-message');
+            
+            if (adminId === ADMIN_CREDENTIALS.id && adminPassword === ADMIN_CREDENTIALS.password) {
+                // Save admin session
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                sessionStorage.setItem('adminId', adminId);
+                
+                // Redirect to admin dashboard
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                errorMsg.textContent = 'رقم المشرف أو كلمة المرور غير صحيحة';
+                errorMsg.style.display = 'block';
+                setTimeout(() => {
+                    errorMsg.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Check if already logged in
+        if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+            window.location.href = 'admin-dashboard.html';
+        }
+    </script>
+</body>
+
+</html>
+
